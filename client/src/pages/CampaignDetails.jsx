@@ -3,12 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 
 import { useStateContext } from "../context";
-import { CustomButton } from "../components";
-// import { CountBox, CustomButton, Loader } from '../components';
+import { CountBox, CustomButton, Loader } from "../components";
 import { calculateBarPercentage, daysLeft } from "../utils";
 import { thirdweb } from "../assets";
 
-function CampaignDetails() {
+const CampaignDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { donate, getDonations, contract, address } = useStateContext();
@@ -18,6 +17,25 @@ function CampaignDetails() {
   const [donators, setDonators] = useState([]);
 
   const remainingDays = daysLeft(state.deadline);
+
+  const fetchDonators = async () => {
+    const data = await getDonations(state.pId);
+
+    setDonators(data);
+  };
+
+  useEffect(() => {
+    if (contract) fetchDonators();
+  }, [contract, address]);
+
+  const handleDonate = async () => {
+    setIsLoading(true);
+
+    await donate(state.pId, amount);
+
+    navigate("/");
+    setIsLoading(false);
+  };
 
   return (
     <div>
@@ -162,6 +180,6 @@ function CampaignDetails() {
       </div>
     </div>
   );
-}
+};
 
 export default CampaignDetails;
