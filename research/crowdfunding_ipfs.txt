@@ -1,0 +1,10 @@
+// Hash the campaign's image and description using IPFS
+bytes32 hash = ipfsHash(_image, _description);
+
+The contract.events.Donation call is used to subscribe to the "Donation" event emitted from the contract. 
+The first argument is an object that can be used to filter the events, however in this case it's left empty. 
+The second argument is a callback function that will be executed every time the "Donation" event is triggered.
+
+1. Write a separate off-chain script that converts the image and description into bytes, hashes it and adds it to IPFS.
+2. The script returns the IPFS hash, which can be sent to the Ethereum network as a transaction.
+3. The Solidity contract can store the IPFS hash in its storage, and later retrieve the data using the hash.
